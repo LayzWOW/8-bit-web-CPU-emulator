@@ -3,9 +3,6 @@ let cpu = {
     pc: 0
 };
 
-// BUG FIX 1: Removed stray top-level `let status = execute(instruction, parts.slice(1));`
-// that referenced undefined variables and crashed the script on load.
-
 function runProgram() {
     const codeArea = document.getElementById('code');
     const code = codeArea.value.split('\n'); // Line 1 = Index 0
@@ -33,8 +30,6 @@ function runProgram() {
 
         try {
             // Execute the command
-            // BUG FIX 4: execute() no longer silently swallows errors — it throws,
-            // and this catch block is the single point of error display.
             let status = execute(parts[0].toUpperCase(), parts.slice(1));
             iterations++;
 
@@ -60,10 +55,8 @@ function execute(instr, args) {
     };
 
     // BUG FIX 4: Removed internal try/catch — errors now propagate up to runProgram()
-    // so they are caught and displayed once, with the correct line number.
     switch(instr) {
         case "LOAD":
-            // BUG FIX 2: Removed dead `let val = parseInt(args[1])` — it was never used.
             cpu.registers[getReg(args[0])] = parseFloat(args[1]);
             break;
         case "ADD":
@@ -87,8 +80,6 @@ function execute(instr, args) {
                 cpu.pc = parseInt(args[2]) - 1;
                 return "JUMPED";
             }
-            // BUG FIX 3: Was returning `false` — now falls through cleanly (returns undefined),
-            // which is consistent with the "did not jump" path of other instructions.
             break;
         case "HALT":
             return "HALT";
