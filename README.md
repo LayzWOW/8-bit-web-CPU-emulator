@@ -57,7 +57,7 @@ LOAD R7 1        ; Constant for decrementing
 ; --- Loop Start (Line 14) ---
 ADD R0 R0 R5     ; Add 17.75 to the total
 SUB R6 R6 R7     ; Decrement the counter
-BEQ R6 R10 19   ; If counter is 0 (R10 is empty), jump to HALT
+BEQ R6 R10 19    ; If counter is 0 (R10 is empty), jump to HALT
 JUMP 14          ; Else, go back to Line 14
 
 HALT             ; Final R0 should be 53.25
